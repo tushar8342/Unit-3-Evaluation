@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <style>
+            #main{
+            border: 3px solid grey;
+            display: flex;
+            width: 98%;
+            position: fixed;
+            margin: auto;
+            justify-content: right;
+            font-size: 25px;
+            border-radius: 20px;
+            background-color: teal;
+            color: white;
+            font-family: sans-serif;
+        }
+        #main>div{
+            padding: 20px;
+            cursor: pointer;
+        }
+        #main>div:hover{
+            color: gold;
+        }
+
+
+
+        #updiv{
+            width: 95%;
+        }
+        img{
+            height: 100%;
+            width: 100%;
+        }
+        #appdiv{
+            display: grid;
+            grid-template-columns: repeat(3,1fr);
+            grid-gap: 10px;
+        }
+        #btn{
+            padding: 10px;
+            background-color: blue;
+            border-radius: 10px;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div id="main">
+        <div id="menu" onclick="food()">Menu</div>
+        <div id="cart" onclick="gotoprod()">Cart</div>
+        <div id="login">Login</div>
+        <div id="signup">Signup</div>
+    </div>
+
+    <div id="appdiv"></div>
+    
+</body>
+</html>
+<script>
+
+async function food(){
+    try{   
+      let responce= await fetch(`https://www.themealdb.com/api/json/v1/1/filter.php?c=Seafood`)
+  
+         let data = await responce.json()
+         console.log(data)
+         check(data.meals)
+    }
+    catch(err){
+        console.log(err)
+    }
+}
+
+
+function check(data){
+    data.map(function(elem){
+        var div = document.createElement("div")
+        div.setAttribute("id","flex")
+
+        var updiv = document.createElement("div")
+        updiv.setAttribute("id","updiv")
+        var dwndiv = document.createElement("div")
+
+        var btn = document.createElement("button")
+        btn.setAttribute("id","btn")
+        btn.textContent = "Add To Cart"
+        btn.addEventListener("click", adding)
+        
+
+
+       var img =  document.createElement("img")
+       img.src = elem.strMealThumb
+
+       var prc = document.createElement("h3")
+       var x = Math.floor(Math.random() * 1000);
+       prc.textContent = "Price"+x
+
+       updiv.append(img)
+       dwndiv.append(btn,prc)
+       div.append(updiv,dwndiv)
+       document.querySelector("#appdiv").append(div)
+
+    })
+}
+var arr = []
+
+function adding(elem){
+    arr.push(elem)
+    console.log(arr)
+    document.querySelector("#cart").innerHTML = "Cart :"+arr.length
+   
+}
+function gotoprod(){
+    window.location.href = "cart.html"
+}
+
+</script>
